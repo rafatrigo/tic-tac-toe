@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
 public class Subject {
-	private Subject father;
+    private Subject father;
     private Subject mother;
     private Chromosome cm;
     private int matches;
@@ -13,33 +14,36 @@ public class Subject {
     private int draws;
     private int defeats;
     private int score;
-    private int mutation = 100; //percentage of mutation in the crossover
+    private int mutation; //percentage of mutation in the crossover
     
     //------CONSTRUCTORS--------------
     
-    /*
+    /**
      * Create a subject without parents
+     * 
+     * @param dnaSize The size of dna
+     * @param mutation The percentage of mutation that will be used during crossover
      */
-    public Subject()
+    public Subject(int dnaSize, int mutation)
     {
         this.father = null;
         this.mother = null;
-        this.cm = new Chromosome();
         this.matches = 0;
         this.victories = 0;
         this.score = 0;
         this.defeats = 0;
         this.draws = 0;
+        this.mutation = mutation;
+        this.cm = new Chromosome(dnaSize);
     }
     
     /**
-     * Mix the DNA of a father and a mother
-     * to create a new subject
+     * Create a subject mixing the dna of a father and a mother
      * 
      * @param father
      * @param mother
      */
-    public Subject(Subject father, Subject mother)
+    public Subject(Subject father, Subject mother, int mutation)
     {
         this.father = father;
         this.mother = mother;
@@ -49,6 +53,7 @@ public class Subject {
         this.score = 0;
         this.defeats = 0;
         this.draws = 0;
+        this.mutation = mutation;
     }
     
     //------------------------------------------

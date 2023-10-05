@@ -4,23 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The Chromosome class is responsible for store and create dna
+ */
 public class Chromosome {
-	private  int nAlleles = 40; //the size of dna
+	private  int nAlleles; //the size of dna
     private List<Integer> dna; //list of numbers between 0 and 9
 	
     //--------CONSTRUCTORS------------
     
-	public Chromosome()
+    /**
+     * Create a new chromosome
+     * 
+     * @param dnaSize the size of the chromosome
+     */
+	public Chromosome(int dnaSize)
 	{
-		this.dna = new ArrayList<>(nAlleles);
+		this.nAlleles = dnaSize;
+		this.dna = new ArrayList<>(dnaSize);
 		
 		this.generateDNA();
 	}
 	
 	/**
-	 * Creates a chromosome from an existing one
+	 * Copy a chromosome
 	 * 
-	 * @param dna
+	 * @param dna The dna of the chromosome that will be copied
 	 */
 	public Chromosome(List<Integer> dna)
 	{
@@ -33,6 +42,9 @@ public class Chromosome {
 	
 	//-------METHODS----------------------
 	
+	/**
+	 * Generate dna
+	 */
 	private void generateDNA()
 	{
 		Random gerador = new Random();

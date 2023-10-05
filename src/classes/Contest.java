@@ -1,5 +1,6 @@
 package classes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,6 +10,8 @@ public class Contest {
     private int draws;
     
     /**
+     * Array of values that represents the board
+     * 
      * 0 1 2
      * 3 4 5
      * 6 7 8
@@ -37,8 +40,8 @@ public class Contest {
      * puts two Subjects to compete and at the end of the match
      * rewards the Subjects
      * 
-     * @param p1
-     * @param p2
+     * @param p1 The subject that will make the first move
+     * @param p2 The subject that will make the second move
      */
     public void compete(Subject p1, Subject p2)
     {
@@ -61,147 +64,25 @@ public class Contest {
             {
                 mov = dnaP1.get(i);
                 
-                switch(mov)
+                
+                //The play method try to make a move, and if the move is valid he return true
+                //If the play method returns true sum 1 in player, passing the turn to player 2
+                if(this.play(mov, player))
                 {
-                    case 0:
-                        
-                        if(this.board[0][0] == 0)
-                        {
-                            this.board[0][0] = 1;
-                            player++;
-                        }
-                        
-                        break;
-                    case 1:
-                        if(this.board[0][1] == 0)
-                        {
-                            this.board[0][1] = 1;
-                            player++;
-                        }
-                        break;
-                    case 2:
-                        if(this.board[0][2] == 0)
-                        {
-                            this.board[0][2] = 1;
-                            player++;
-                        }
-                        break;
-                    case 3:
-                        if(this.board[1][0] == 0)
-                        {
-                            this.board[1][0] = 1;
-                            player++;
-                        }
-                        break;
-                    case 4:
-                        if(this.board[1][1] == 0)
-                        {
-                            this.board[1][1] = 1;
-                            player++;
-                        }
-                        break;
-                    case 5:
-                        if(this.board[1][2] == 0)
-                        {
-                            this.board[1][2] = 1;
-                            player++;
-                        }
-                        break;
-                    case 6:
-                        if(this.board[2][0] == 0)
-                        {
-                            this.board[2][0] = 1;
-                            player++;
-                        }
-                        break;
-                    case 7:
-                        if(this.board[2][1] == 0)
-                        {
-                            this.board[2][1] = 1;
-                            player++;
-                        }
-                        break;
-                    case 8:
-                        if(this.board[2][2] == 0)
-                        {
-                            this.board[2][2] = 1;
-                            player++;
-                        }
-                        break;
+                	player++;
                 }
                 
                i+=2;
             }else{
                 mov = dnaP2.get(j);
                 
-                switch(mov)
+                //The play method try to make a move, and if the move is valid he return true
+                //If the play method returns true subtract 1 in player, passing the turn to player 1
+                if(this.play(mov, player))
                 {
-                    case 0:
-                        
-                        if(this.board[0][0] == 0)
-                        {
-                            this.board[0][0] = 2;
-                            player--;
-                        }
-                        
-                        break;
-                    case 1:
-                        if(this.board[0][1] == 0)
-                        {
-                            this.board[0][1] = 2;
-                            player--;
-                        }
-                        break;
-                    case 2:
-                        if(this.board[0][2] == 0)
-                        {
-                            this.board[0][2] = 2;
-                            player--;
-                        }
-                        break;
-                    case 3:
-                        if(this.board[1][0] == 0)
-                        {
-                            this.board[1][0] = 2;
-                            player--;
-                        }
-                        break;
-                    case 4:
-                        if(this.board[1][1] == 0)
-                        {
-                            this.board[1][1] = 2;
-                            player--;
-                        }
-                        break;
-                    case 5:
-                        if(this.board[1][2] == 0)
-                        {
-                            this.board[1][2] = 2;
-                            player--;
-                        }
-                        break;
-                    case 6:
-                        if(this.board[2][0] == 0)
-                        {
-                            this.board[2][0] = 2;
-                            player--;
-                        }
-                        break;
-                    case 7:
-                        if(this.board[2][1] == 0)
-                        {
-                            this.board[2][1] = 2;
-                            player--;
-                        }
-                        break;
-                    case 8:
-                        if(this.board[2][2] == 0)
-                        {
-                            this.board[2][2] = 2;
-                            player--;
-                        }
-                        break;
+                	player--;
                 }
+                
                 j+=2;
             }
             
@@ -222,12 +103,76 @@ public class Contest {
         this.clear(); //clear the board
 
     }
+
+    /**
+     *	Pits subjects against a fixed strategy
+     * 
+     * @param p1 The subject that will make the first move
+     * @param strategy The sequence of moves that the subjects will play against
+     */
+    public void compete(Subject p1, ArrayList<Integer> strategy)
+    {
+        List<Integer> dnaP1 = p1.getCm().getDNA();
+        
+        int end = 3; //value for when the game is not over
+        
+        int player = 1; //define which subject will make a move
+        
+        int i = 0; //used to know which position in player 1's DNA we are in
+        
+        int j = 0; //used to know which position in player 2's DNA we are in
+        
+        int mov = 0; //where on the board will the player play
+        
+        while(i < dnaP1.size() && j < strategy.size() && end == 3)
+        {
+            if(player != 2)
+            {
+                mov = dnaP1.get(i);
+                
+                
+                //The play method try to make a move, and if the move is valid he return true
+                //If the play method returns true sum 1 in player, passing the turn to player 2
+                if(this.play(mov, player))
+                {
+                	player++;
+                }
+                
+               i+=2;
+            }else{
+                mov = strategy.get(j);
+                
+                //The play method try to make a move, and if the move is valid he return true
+                //If the play method returns true subtract 1 in player, passing the turn to player 1
+                if(this.play(mov, player))
+                {
+                	player--;
+                }
+                
+                j+=1;
+            }
+            
+            
+            end = this.winner(this.board); //check if the match is over
+            
+            if(end != 3)
+            {
+            	this.reward(p1, end);
+            }
+            
+        }
+        
+        p1.setMatches(p1.getMatches() + 1); //p1 matches +1
+        
+        this.clear(); //clear the board
+
+    }
     
     /**
-     * rewards the Subjects
+     * rewards and punish the subjects
      * 
-     * @param p1
-     * @param p2
+     * @param p1 The first subject to play
+     * @param p2 The second subject to play
      * @param result the result of the match 0 = draw, 1 = p1 won and 2 = p2 won
      */
     public void reward(Subject p1, Subject p2, int result)
@@ -264,11 +209,43 @@ public class Contest {
             p2.setDraws(p2.getDraws() + 1); //p2 draws +1
         }
     }
+    
+    /**
+     * rewards and punish the subjects
+     * 
+     * @param p1 p1 The first subject to play
+     * @param result the result of the match 0 = draw, 1 = p1 won and 2 = p2 won
+     */
+    public void reward(Subject p1, int result)
+    {
+    	//if p1 won
+        if(result == 1)
+        {
+            p1.setVictories(p1.getVictories()+ 1); //p1 victories +1
+            
+            p1.setScore(p1.getScore() + 3); //p1 score +3
+            
+            this.victoriesP1++;
+            
+        }else if(result == 2) //if p2 won 
+        {
+
+            p1.setDefeats(p1.getDefeats() + 1); //p1 defeats +1
+            
+            this.victoriesP2++;
+            
+        }else if(result == 0) //draw
+        {
+            this.draws++;
+            p1.setScore(p1.getScore() + 1); //p1 score +1
+            p1.setDraws(p1.getDraws() + 1); //p1 draws +1
+        }
+    }
 
     /**
      * check if anyone won
      * 
-     * @param board
+     * @param board The array containing the moves
      * @return 0 = draw, 1 = p1 won, 2 = p2 won and 3 = game is not over
      */
     public int winner(int[][] board)
@@ -333,7 +310,7 @@ public class Contest {
     }
     
     /**
-     * set all the positions on the board as 0
+     * Set all the positions on the board as 0
      */
     public void clear()
     {
@@ -352,7 +329,7 @@ public class Contest {
     }
     
     /**
-     * print the board
+     * Print the board on the console
      */
     public void show()
     {
@@ -394,6 +371,11 @@ public class Contest {
         }
     }
     
+    /**
+     * Make the best subject compete against a human player
+     * 
+     * @param p The best subject
+     */
     public void hCompete(Subject p)
     {
         Scanner read = new Scanner(System.in);
@@ -425,167 +407,25 @@ public class Contest {
                     System.out.print("Onde voce quer jogar?\n> ");
                     mov = read.nextInt();
                     
-                    switch(mov)
+                    //The play method try to make a move, and if the move is valid he return true
+                    //If the play method returns true sum 1 in player, passing the turn to player 2
+                    if(this.play(mov, player))
                     {
-                        case 0:
-
-                            if(this.board[0][0] == 0)
-                            {
-                                this.board[0][0] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-
-                            break;
-                        case 1:
-                            if(this.board[0][1] == 0)
-                            {
-                                this.board[0][1] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 2:
-                            if(this.board[0][2] == 0)
-                            {
-                                this.board[0][2] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 3:
-                            if(this.board[1][0] == 0)
-                            {
-                                this.board[1][0] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 4:
-                            if(this.board[1][1] == 0)
-                            {
-                                this.board[1][1] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 5:
-                            if(this.board[1][2] == 0)
-                            {
-                                this.board[1][2] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 6:
-                            if(this.board[2][0] == 0)
-                            {
-                                this.board[2][0] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 7:
-                            if(this.board[2][1] == 0)
-                            {
-                                this.board[2][1] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 8:
-                            if(this.board[2][2] == 0)
-                            {
-                                this.board[2][2] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        default:
-                            System.out.println("Opcao invalida, escolha novamente.");
-                            break;
+                    	player++;
+                    }else {
+                    	System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
                     }
                     
                 }else{
                     mov = dnaP.get(i);
 
-                    switch(mov)
+                    //The play method try to make a move, and if the move is valid he return true
+                    //If the play method returns true subtract 1 in player, passing the turn to player 1
+                    if(this.play(mov, player))
                     {
-                        case 0:
-
-                            if(this.board[0][0] == 0)
-                            {
-                                this.board[0][0] = 2;
-                                player--;
-                            }
-
-                            break;
-                        case 1:
-                            if(this.board[0][1] == 0)
-                            {
-                                this.board[0][1] = 2;
-                                player--;
-                            }
-                            break;
-                        case 2:
-                            if(this.board[0][2] == 0)
-                            {
-                                this.board[0][2] = 2;
-                                player--;
-                            }
-                            break;
-                        case 3:
-                            if(this.board[1][0] == 0)
-                            {
-                                this.board[1][0] = 2;
-                                player--;
-                            }
-                            break;
-                        case 4:
-                            if(this.board[1][1] == 0)
-                            {
-                                this.board[1][1] = 2;
-                                player--;
-                            }
-                            break;
-                        case 5:
-                            if(this.board[1][2] == 0)
-                            {
-                                this.board[1][2] = 2;
-                                player--;
-                            }
-                            break;
-                        case 6:
-                            if(this.board[2][0] == 0)
-                            {
-                                this.board[2][0] = 2;
-                                player--;
-                            }
-                            break;
-                        case 7:
-                            if(this.board[2][1] == 0)
-                            {
-                                this.board[2][1] = 2;
-                                player--;
-                            }
-                            break;
-                        case 8:
-                            if(this.board[2][2] == 0)
-                            {
-                                this.board[2][2] = 2;
-                                player--;
-                            }
-                            break;
+                    	player--;
                     }
+                    
                     i+=2;
                 }
                
@@ -634,167 +474,26 @@ public class Contest {
                     System.out.print("Onde voce quer jogar?\n> ");
                     mov = read.nextInt();
                     
-                    switch(mov)
+                    //The play method try to make a move, and if the move is valid he return true
+                    //If the play method returns true sum 1 in player, passing the turn to player 2
+                    if(this.play(mov, player))
                     {
-                        case 0:
-
-                            if(this.board[0][0] == 0)
-                            {
-                                this.board[0][0] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-
-                            break;
-                        case 1:
-                            if(this.board[0][1] == 0)
-                            {
-                                this.board[0][1] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 2:
-                            if(this.board[0][2] == 0)
-                            {
-                                this.board[0][2] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 3:
-                            if(this.board[1][0] == 0)
-                            {
-                                this.board[1][0] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 4:
-                            if(this.board[1][1] == 0)
-                            {
-                                this.board[1][1] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 5:
-                            if(this.board[1][2] == 0)
-                            {
-                                this.board[1][2] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 6:
-                            if(this.board[2][0] == 0)
-                            {
-                                this.board[2][0] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 7:
-                            if(this.board[2][1] == 0)
-                            {
-                                this.board[2][1] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        case 8:
-                            if(this.board[2][2] == 0)
-                            {
-                                this.board[2][2] = 1;
-                                player++;
-                            }else{
-                                System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
-                            }
-                            break;
-                        default:
-                            System.out.println("Opcao invalida, escolha novamente.");
-                            break;
+                    	player++;
+                    }else {
+                    	System.out.println("Esta posicao ja esta ocupada, escolha novamente.");
                     }
+                    
                     
                 }else{
                     mov = dnaP.get(i);
-
-                    switch(mov)
+                    
+                    //The play method try to make a move, and if the move is valid he return true
+                    //If the play method returns true subtract 1 in player, passing the turn to player 1
+                    if(this.play(mov, player))
                     {
-                        case 0:
-
-                            if(this.board[0][0] == 0)
-                            {
-                                this.board[0][0] = 2;
-                                player--;
-                            }
-
-                            break;
-                        case 1:
-                            if(this.board[0][1] == 0)
-                            {
-                                this.board[0][1] = 2;
-                                player--;
-                            }
-                            break;
-                        case 2:
-                            if(this.board[0][2] == 0)
-                            {
-                                this.board[0][2] = 2;
-                                player--;
-                            }
-                            break;
-                        case 3:
-                            if(this.board[1][0] == 0)
-                            {
-                                this.board[1][0] = 2;
-                                player--;
-                            }
-                            break;
-                        case 4:
-                            if(this.board[1][1] == 0)
-                            {
-                                this.board[1][1] = 2;
-                                player--;
-                            }
-                            break;
-                        case 5:
-                            if(this.board[1][2] == 0)
-                            {
-                                this.board[1][2] = 2;
-                                player--;
-                            }
-                            break;
-                        case 6:
-                            if(this.board[2][0] == 0)
-                            {
-                                this.board[2][0] = 2;
-                                player--;
-                            }
-                            break;
-                        case 7:
-                            if(this.board[2][1] == 0)
-                            {
-                                this.board[2][1] = 2;
-                                player--;
-                            }
-                            break;
-                        case 8:
-                            if(this.board[2][2] == 0)
-                            {
-                                this.board[2][2] = 2;
-                                player--;
-                            }
-                            break;
+                    	player--;
                     }
+
                     i+=2;
                 }
                
@@ -826,6 +525,90 @@ public class Contest {
             }
             
         }
+    }
+    
+    /**
+     * Make a move on the board
+     * 
+     * @param position The position of the board where the player wants to play
+     * @param player The player 1 = first player or 2 = second player
+     * @return False if the move is not valid or True if the move is a valid move
+     */
+    public boolean play(int position, int player)
+    {
+    	
+    	boolean validMove = false;
+    	
+    	switch(position)
+        {
+            case 0:
+                
+                if(this.board[0][0] == 0)
+                {
+                    this.board[0][0] = player;
+                    validMove = true;
+                }
+                
+                break;
+            case 1:
+                if(this.board[0][1] == 0)
+                {
+                    this.board[0][1] = player;
+                    validMove = true;
+                }
+                break;
+            case 2:
+                if(this.board[0][2] == 0)
+                {
+                    this.board[0][2] = player;
+                    validMove = true;
+                }
+                break;
+            case 3:
+                if(this.board[1][0] == 0)
+                {
+                    this.board[1][0] = player;
+                    validMove = true;
+                }
+                break;
+            case 4:
+                if(this.board[1][1] == 0)
+                {
+                    this.board[1][1] = player;
+                    validMove = true;
+                }
+                break;
+            case 5:
+                if(this.board[1][2] == 0)
+                {
+                    this.board[1][2] = player;
+                    validMove = true;
+                }
+                break;
+            case 6:
+                if(this.board[2][0] == 0)
+                {
+                    this.board[2][0] = player;
+                    validMove = true;
+                }
+                break;
+            case 7:
+                if(this.board[2][1] == 0)
+                {
+                    this.board[2][1] = player;
+                    validMove = true;
+                }
+                break;
+            case 8:
+                if(this.board[2][2] == 0)
+                {
+                    this.board[2][2] = player;
+                    validMove = true;
+                }
+                break;
+        }
+    	
+    	return validMove;
     }
     
 //----------------------------------------
