@@ -1,3 +1,6 @@
+##############################
+## Eclipse
+##############################
 .settings/
 bin/
 tmp/
@@ -11,3 +14,15 @@ tmp/
 local.properties
 .loadpath
 .factorypath
+
+##############################
+## Java
+##############################
+.mtj.tmp/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
